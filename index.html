@@ -8,6 +8,8 @@
   :root {
     --verde: #c6ff00;
     --verde-oscuro: #8bc400;
+    --rosa: #ff2e92;
+    --morado: #7b2ff7;
     --fondo-1: #0f2027;
     --fondo-2: #203a43;
     --fondo-3: #2c5364;
@@ -22,8 +24,40 @@
     height: 100%;
     overflow: hidden;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    background: linear-gradient(135deg, var(--fondo-1), var(--fondo-2), var(--fondo-3));
     color: #fff;
+  }
+
+  body {
+    background: linear-gradient(-45deg, var(--morado), var(--fondo-1), var(--rosa), var(--fondo-2), var(--verde-oscuro), var(--fondo-3));
+    background-size: 400% 400%;
+    animation: fondoAnimado 16s ease infinite;
+  }
+
+  @keyframes fondoAnimado {
+    0%   { background-position: 0% 50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  .decoraciones {
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .decoraciones span {
+    position: absolute;
+    font-size: 2.4rem;
+    opacity: 0.35;
+    animation: flotar 7s ease-in-out infinite;
+    filter: drop-shadow(0 0 10px rgba(255,255,255,0.25));
+  }
+
+  @keyframes flotar {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-40px) rotate(20deg); }
   }
 
   .card {
@@ -33,26 +67,37 @@
     transform: translate(-50%, -50%);
     width: 90%;
     max-width: 420px;
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    border-radius: 24px;
-    padding: 36px 28px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 28px;
+    padding: 40px 28px;
     text-align: center;
-    backdrop-filter: blur(6px);
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 0 0 1px rgba(255,255,255,0.05), 0 25px 60px rgba(0, 0, 0, 0.45), 0 0 60px rgba(198, 255, 0, 0.15);
+    z-index: 1;
+    animation: aparecer 0.5s ease;
+  }
+
+  @keyframes aparecer {
+    from { opacity: 0; transform: translate(-50%, -50%) scale(0.9); }
+    to   { opacity: 1; transform: translate(-50%, -50%) scale(1); }
   }
 
   .hidden { display: none !important; }
 
   h1 {
-    font-size: 1.6rem;
+    font-size: 1.8rem;
     margin: 0 0 14px;
+    text-shadow: 0 4px 20px rgba(0,0,0,0.4);
   }
 
   .racket-name {
     font-size: 1.05rem;
     font-weight: 700;
-    color: var(--verde);
+    background: linear-gradient(90deg, var(--verde), #8ef0ff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
     margin: 0 0 30px;
     line-height: 1.4;
   }
@@ -65,28 +110,30 @@
   }
 
   button {
-    font-size: 1.1rem;
-    font-weight: 600;
-    padding: 14px 32px;
-    border-radius: 14px;
+    font-size: 1.15rem;
+    font-weight: 700;
+    padding: 15px 34px;
+    border-radius: 16px;
     border: none;
     cursor: pointer;
     touch-action: manipulation;
     -webkit-tap-highlight-color: transparent;
     user-select: none;
-    transition: transform 0.15s ease, background 0.2s ease;
+    transition: transform 0.15s ease, box-shadow 0.2s ease;
   }
 
   #yes {
-    background: var(--verde);
-    color: #1a1a1a;
+    background: linear-gradient(135deg, var(--verde), #6fe7a8);
+    color: #0c2b0c;
+    box-shadow: 0 8px 24px rgba(198, 255, 0, 0.45);
   }
 
-  #yes:hover { background: var(--verde-oscuro); }
+  #yes:hover { transform: scale(1.06); box-shadow: 0 10px 30px rgba(198, 255, 0, 0.6); }
 
   #no {
-    background: #ff4b5c;
+    background: linear-gradient(135deg, #ff4b5c, var(--rosa));
     color: #fff;
+    box-shadow: 0 8px 24px rgba(255, 46, 146, 0.4);
   }
 
   #no.dodging {
@@ -103,19 +150,28 @@
     width: 90%;
     max-width: 480px;
     text-align: center;
+    z-index: 1;
   }
 
   .success h2 {
-    font-size: 1.8rem;
+    font-size: 2rem;
     line-height: 1.5;
+    text-shadow: 0 4px 24px rgba(0,0,0,0.5);
+    background: linear-gradient(90deg, #fff, var(--verde), #fff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
   }
 
   .pala-foto {
     margin-top: 24px;
     width: 220px;
     max-width: 60%;
-    border-radius: 16px;
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    border-radius: 20px;
+    background: #fff;
+    padding: 10px;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.55), 0 0 50px rgba(198, 255, 0, 0.25);
+    animation: aparecer 0.6s ease;
   }
 
   .emoji {
@@ -132,8 +188,18 @@
 </head>
 <body>
 
+  <div class="decoraciones" aria-hidden="true">
+    <span style="top:8%; left:10%; animation-delay:0s;">🎾</span>
+    <span style="top:15%; left:80%; animation-delay:1.2s; font-size:2rem;">🏆</span>
+    <span style="top:70%; left:6%; animation-delay:2.1s; font-size:2rem;">🎉</span>
+    <span style="top:80%; left:85%; animation-delay:0.6s;">🎾</span>
+    <span style="top:40%; left:92%; animation-delay:1.8s; font-size:1.8rem;">✨</span>
+    <span style="top:30%; left:4%; animation-delay:0.9s; font-size:1.8rem;">✨</span>
+    <span style="top:85%; left:45%; animation-delay:1.5s; font-size:2rem;">🎾</span>
+  </div>
+
   <div class="card" id="card">
-    <h1>¿Me compras la pala?</h1>
+    <h1>🎾 ¿Me compras la pala? 🎾</h1>
     <p class="racket-name">NOX AT10 Genius 12K Alum Xtrem 2026 by Agustín Tapia</p>
     <div class="buttons">
       <button id="yes" type="button">Sí</button>

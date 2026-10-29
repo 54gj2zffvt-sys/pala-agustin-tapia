@@ -134,7 +134,7 @@
 
   <div class="card" id="card">
     <h1>¿Me compras la pala?</h1>
-    <p class="racket-name">Nox AT10 Luxury Genius 18K Alum by Agustín Tapia 2026</p>
+    <p class="racket-name">NOX AT10 Genius 12K Alum Xtrem 2026 by Agustín Tapia</p>
     <div class="buttons">
       <button id="yes" type="button">Sí</button>
       <button id="no" type="button">No</button>
@@ -144,7 +144,7 @@
   <div class="success hidden" id="success">
     <div class="emoji">🎉🏆🎊🥳🎾</div>
     <h2>¡Felicidades, eres el padre del año!</h2>
-    <img class="pala-foto" src="pala.jpg" alt="Nox AT10 Luxury Genius 18K Alum by Agustín Tapia 2026">
+    <img class="pala-foto" src="pala.webp" alt="NOX AT10 Genius 12K Alum Xtrem 2026 by Agustín Tapia">
   </div>
 
 <script>
@@ -189,13 +189,8 @@
     noBtn.style.transform = `scale(${scale})`;
   }
 
-  // Dodge before a click can ever land: on hover (desktop) and on
-  // pointerdown (mouse/touch), which fires before the click event.
-  noBtn.addEventListener('mouseenter', dodge);
-  noBtn.addEventListener('pointerdown', (e) => {
-    e.preventDefault();
-    dodge();
-  });
+  // Only reacts to an actual click/tap, not to the cursor hovering
+  // or approaching it.
   noBtn.addEventListener('click', (e) => {
     e.preventDefault();
     dodge();

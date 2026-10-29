@@ -219,7 +219,7 @@
   const card = document.getElementById('card');
   const success = document.getElementById('success');
 
-  // Scale decays toward FLOOR forever: 1% smaller on every dodge, with
+  // Scale decays toward FLOOR forever: 10% smaller on every dodge, with
   // no limit on how many times it can happen. It only approaches FLOOR
   // asymptotically, so it keeps shrinking infinitely but never reaches
   // zero (never actually disappears).
@@ -239,7 +239,7 @@
     }
 
     dodges++;
-    const scale = FLOOR + (1 - FLOOR) * Math.pow(0.99, dodges);
+    const scale = FLOOR + (1 - FLOOR) * Math.pow(0.90, dodges);
     noBtn.classList.add('dodging');
 
     const w = noBtn.offsetWidth * scale;

@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>¿Me compras la pala?</title>
+<style>
+  :root {
+    --verde: #c6ff00;
+    --verde-oscuro: #8bc400;
+    --fondo-1: #0f2027;
+    --fondo-2: #203a43;
+    --fondo-3: #2c5364;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: linear-gradient(135deg, var(--fondo-1), var(--fondo-2), var(--fondo-3));
+    color: #fff;
+  }
+
+  .card {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    max-width: 420px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 24px;
+    padding: 36px 28px;
+    text-align: center;
+    backdrop-filter: blur(6px);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+  }
+
+  .hidden { display: none !important; }
+
+  h1 {
+    font-size: 1.6rem;
+    margin: 0 0 14px;
+  }
+
+  .racket-name {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--verde);
+    margin: 0 0 30px;
+    line-height: 1.4;
+  }
+
+  .buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+
+  button {
+    font-size: 1.1rem;
+    font-weight: 600;
+    padding: 14px 32px;
+    border-radius: 14px;
+    border: none;
+    cursor: pointer;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+    transition: transform 0.15s ease, background 0.2s ease;
+  }
+
+  #yes {
+    background: var(--verde);
+    color: #1a1a1a;
+  }
+
+  #yes:hover { background: var(--verde-oscuro); }
+
+  #no {
+    background: #ff4b5c;
+    color: #fff;
+  }
+
+  #no.dodging {
+    position: fixed;
+    z-index: 1000;
+    transition: left 0.18s ease, top 0.18s ease, transform 0.18s ease;
+  }
+
+  .success {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    max-width: 480px;
+    text-align: center;
+  }
+
+  .success h2 {
+    font-size: 1.8rem;
+    line-height: 1.5;
+  }
+
+  .emoji {
+    font-size: 3rem;
+    margin-bottom: 10px;
+    animation: celebrar 0.6s ease infinite alternate;
+  }
+
+  @keyframes celebrar {
+    from { transform: scale(1) rotate(-4deg); }
+    to   { transform: scale(1.15) rotate(4deg); }
+  }
+</style>
+</head>
+<body>
+
+  <div class="card" id="card">
+    <h1>¿Me compras la pala?</h1>
+    <p class="racket-name">Nox AT10 Luxury Genius 18K Alum by Agustín Tapia 2026</p>
+    <div class="buttons">
+      <button id="yes" type="button">Sí</button>
+      <button id="no" type="button">No</button>
+    </div>
+  </div>
+
+  <div class="success hidden" id="success">
+    <div class="emoji">🎉🏆🎊🥳🎾</div>
+    <h2>¡Felicidades, eres el padre del año!</h2>
+  </div>
+
+<script>
+  const noBtn = document.getElementById('no');
+  const yesBtn = document.getElementById('yes');
+  const card = document.getElementById('card');
+  const success = document.getElementById('success');
+
+  // Scale decays toward FLOOR forever: 1% smaller on every dodge, with
+  // no limit on how many times it can happen. It only approaches FLOOR
+  // asymptotically, so it keeps shrinking infinitely but never reaches
+  // zero (never actually disappears).
+  const FLOOR = 0.12;
+  let dodges = 0;
+
+  function dodge() {
+    // .card uses `transform` for centering, which turns it into the
+    // containing block for fixed-position descendants. Move the button
+    // to <body> first so its fixed coordinates are relative to the
+    // viewport, not the card.
+    if (noBtn.parentNode !== document.body) {
+      const rect = noBtn.getBoundingClientRect();
+      document.body.appendChild(noBtn);
+      noBtn.style.left = rect.left + 'px';
+      noBtn.style.top = rect.top + 'px';
+    }
+
+    dodges++;
+    const scale = FLOOR + (1 - FLOOR) * Math.pow(0.99, dodges);
+    noBtn.classList.add('dodging');
+
+    const w = noBtn.offsetWidth * scale;
+    const h = noBtn.offsetHeight * scale;
+    const maxX = Math.max(0, window.innerWidth - w);
+    const maxY = Math.max(0, window.innerHeight - h);
+
+    const x = Math.random() * maxX;
+    const y = Math.random() * maxY;
+
+    noBtn.style.left = x + 'px';
+    noBtn.style.top = y + 'px';
+    noBtn.style.transform = `scale(${scale})`;
+  }
+
+  // Dodge before a click can ever land: on hover (desktop) and on
+  // pointerdown (mouse/touch), which fires before the click event.
+  noBtn.addEventListener('mouseenter', dodge);
+  noBtn.addEventListener('pointerdown', (e) => {
+    e.preventDefault();
+    dodge();
+  });
+  noBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    dodge();
+  });
+
+  yesBtn.addEventListener('click', () => {
+    card.classList.add('hidden');
+    noBtn.classList.add('hidden');
+    success.classList.remove('hidden');
+  });
+</script>
+
+</body>
+</html>
